@@ -5,6 +5,7 @@ import firebase from 'firebase/app';
 import Auth from '../components/Auth/Auth';
 import firebaseConnection from '../helpers/data/connection';
 import MyNavbar from '../components/MyNavbar/MyNavbar';
+import BoardsContainer from '../components/BoardsContainer/BoardsContainer';
 
 firebaseConnection();
 
@@ -12,6 +13,7 @@ class App extends React.Component {
   state = {
     authed: false,
   }
+
 
   componentDidMount() {
     this.removeListener = firebase.auth().onAuthStateChanged((user) => {
@@ -31,7 +33,7 @@ class App extends React.Component {
       <MyNavbar authed={authed}/>
         <button className="btn-danger">button</button>
         {
-        (authed) ? (<div>You logged in </div>) : (<Auth />)
+        (authed) ? (<BoardsContainer/>) : (<Auth />)
         }
       </div>
     );
