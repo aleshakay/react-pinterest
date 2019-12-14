@@ -1,19 +1,21 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.scss';
 import firebase from 'firebase/app';
-import Auth from '../components/Auth/Auth';
+
 import firebaseConnection from '../helpers/data/connection';
+import Auth from '../components/Auth/Auth';
 import MyNavbar from '../components/MyNavbar/MyNavbar';
 import BoardsContainer from '../components/BoardsContainer/BoardsContainer';
+
+import './App.scss';
+import SingleBoard from '../components/SingleBoard/SingleBoard';
 
 firebaseConnection();
 
 class App extends React.Component {
   state = {
     authed: false,
+    selectedBoardId: null,
   }
-
 
   componentDidMount() {
     this.removeListener = firebase.auth().onAuthStateChanged((user) => {
@@ -25,16 +27,38 @@ class App extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.removeListener();
+  }
+
+  setSingleBoard = (selectedBoardId) => {
+    this.setState({ selectedBoardId });
+  }
+
+  renderView = () => {
+    const { authed, selectedBoardId } = this.state;
+    if (!authed) {
+      return (<Auth />);
+    }
+    if (!selectedBoardId) {
+      return (<BoardsContainer setSingleBoard={this.setSingleBoard} />);
+    }
+    return (<SingleBoard selectedBoardId={selectedBoardId} setSingleBoard={this.setSingleBoard} />);
+  }
+
   render() {
     const { authed } = this.state;
 
     return (
       <div className="App">
-      <MyNavbar authed={authed}/>
-        <button className="btn-danger">button</button>
+        <MyNavbar authed={authed} />
+        <button className="btn btn-danger">Bootstrap Button</button>
+        {/* if they are authenticated, load the board */}
+        {/* else show login button */}
         {
-        (authed) ? (<BoardsContainer/>) : (<Auth />)
+          this.renderView()
         }
+        {/* single board would only show up if you click on the board... once is does it will continue */}
       </div>
     );
   }
