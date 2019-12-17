@@ -1,9 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import pinShape from '../../helpers/propz/pinShape';
+
 
 class Pin extends React.Component {
   static propTypes = {
     pin: pinShape.pinShape,
+    deleteSinglePin: PropTypes.func,
   }
 
   setSelectedPinId = (e) => {
@@ -11,6 +15,12 @@ class Pin extends React.Component {
     const { setSinglePin, pin } = this.props;
     setSinglePin(pin.id);
   }
+
+  deletePinEvent = (e) => {
+    e.preventDefault();
+    const { deleteSinglePin, pin } = this.props;
+    deleteSinglePin(pin.id);
+  };
 
   render() {
     const { pin } = this.props;
@@ -21,7 +31,7 @@ class Pin extends React.Component {
           <img src={pin.imageUrl} className="card-img-top" alt="" />
           <div className="card-body">
             <h5 className="card-title">{pin.title}</h5>
-            <button className="btn btn-danger" onClick={() => {}}>X</button>
+            <button className="btn btn-danger" onClick={this.deletePinEvent}>X</button>
           </div>
         </div>
       </div>
