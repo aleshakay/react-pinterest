@@ -14,16 +14,15 @@ class PinForm extends React.Component {
   }
 
   savePinEvent = (e) => {
-    const { addPin } = this.props;
-
+    const { addPin, selectedBoardId } = this.props;
     e.preventDefault();
     const newPin = {
-      imageurl: this.state.pinImage,
-      title: this.state.pintitle,
+      title: this.state.pinTitle,
+      imageUrl: this.state.pinImageUrl,
       uid: authData.getUid(),
+      boardId: selectedBoardId,
     };
     addPin(newPin);
-    this.setState({ pinimage: '', pintitle: '' });
   }
 
   imageChange = (e) => {
@@ -46,7 +45,7 @@ class PinForm extends React.Component {
               className="form-control"
               id="pin-title"
               placeholder="Cat Pic"
-              value={[this.pintitle]}
+              value={this.pintitle}
               onChange={this.titleChange}
             />
           </div>
