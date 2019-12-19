@@ -53,13 +53,22 @@ class BoardsContainer extends React.Component {
     this.setState({ showBoardForm: true });
   }
 
+  updateBoard = (boardId, updatedBoard) => {
+    boardData.updateBoard(boardId, updatedBoard)
+      .then(() => {
+        this.getBoards();
+        this.setState({ editMode: false, showBoardForm: false });
+      })
+      .catch((errorFromUpdateBoard) => console.error({ errorFromUpdateBoard }));
+  }
+
   render() {
     const { setSingleBoard } = this.props;
 
     return (
       <div>
       <button onClick={this.setShowBoardForm}>Add a new board</button>
-      { this.state.showBoardForm && <BoardForm addBoard={this.addBoard} editMode={this.state.editMode} boardToEdit={this.state.boardToEdit} /> }
+      { this.state.showBoardForm && <BoardForm addBoard={this.addBoard} editMode={this.state.editMode} boardToEdit={this.state.boardToEdit} updateBoard={this.updateBoard} /> }
       {this.state.boards.map((board) => (<Board key={board.id} board={board} setSingleBoard={setSingleBoard} setEditMode={this.setEditMode} setBoardToEdit={this.setBoardToEdit}/>))}
       </div>);
   }
