@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import boardData from '../../helpers/data/boardData';
 import pinData from '../../helpers/data/pinData';
 import Pin from '../Pin/Pin';
+import PinForm from '../PinForm/PinForm';
 
 class SingleBoard extends React.Component {
   static propTypes = {
@@ -33,6 +34,14 @@ class SingleBoard extends React.Component {
       .catch((errorFromGetPins) => console.error({ errorFromGetPins }));
   }
 
+  addPin= (newPin) => {
+    pinData.savePin(newPin)
+      .then(() => {
+        this.getPinData();
+      })
+      .catch((errorFromSavePin) => console.error({ errorFromSavePin }));
+  }
+
   deleteSinglePin = (pinId) => {
     const { selectedBoardId } = this.props;
 
@@ -58,6 +67,7 @@ class SingleBoard extends React.Component {
           <h2>{board.name}</h2>
           <p>{board.description}</p>
           <div className="d-flex flex-wrap">
+            <PinForm addPin={this.addPin}/>
             { pins.map((pin) => <Pin key={pin.id} pin={pin} deleteSinglePin={this.deleteSinglePin} />)}
           </div>
         </div>
